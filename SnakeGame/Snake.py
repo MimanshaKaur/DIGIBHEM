@@ -31,7 +31,7 @@ food.fillcolor("#A7C957")
 food.speed(0)
 food.penup()
 food.ht()
-food.goto(0,250)
+food.goto(0,150)
 food.st()
 
 # creating scoreboard
@@ -45,28 +45,28 @@ sb.goto(-450,-450)
 sb.write(" SCORE : 0      | HIGHEST SCORE : 0 ")
 
 def moveup():
-    if head.turtle.direction!="down":
-        head.turtle.direction="up"
+    if head.heading()!= 90:
+        head.right(270)
 def movedown():
-    if head.turtle.direction!="up":
-        head.turtle.direction="down"
+    if head.heading()!=270:
+        head.right(90)
 def moveleft():
-    if head.direction!="right":
-        head.turtle.direction="left"
+    if head.heading()!=0:
+        head.right(180)
 def moveright():
-    if head.direction!="left":
-        head.direction="right"
+    if head.heading()!=180:
+        head.right(0)
 def move():
-    if head.turtle.direction=="up":
+    if head.heading()==270:
         y=head.ycor()
         head.sety(y+20)
-    if head.direction=="down":
+    if head.heading()==90:
         y=head.ycor()
         head.sety(y-20)
-    if head.direction=="left":
+    if head.heading()==180:
         x=head.xcor()
         head.setx(x-20)
-    if head.direction=="right":
+    if head.heading()==0:
         x=head.xcor()
         head.setx(x+20)
 
@@ -115,21 +115,20 @@ while True:
         y=head.ycor()
         body[0].goto(x,y)
     move()
-    time.sleep()
+    time.sleep(0)
 
     #checking collision with body
     for j in body:
         if j.distance(head)<20:
             time.sleep(1)
             head.goto(0,0)
-            head.direction("stop")
             j.ht()
             body.clear()
             score=0
             delay=0
             sb.clear()
             sb.write("SCORE:{} HIGHESTSCORE: {}",format(score,highestscore))
-    time.delay(0)
+
     #checking collision with borders
     x=head.xcor()
     y=head.ycor()
