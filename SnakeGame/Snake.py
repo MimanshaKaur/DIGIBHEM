@@ -4,7 +4,7 @@ import time
 
 delay = 0.1
 score = 0
-highestscore = 0
+high_score = 0
 
 #snake body
 body=[]
@@ -87,12 +87,12 @@ while True:
         head.goto(0,0)
         head.direction = "Stop"
         for j in body:
-                j.goto(1000, 1000)
+            j.goto(1000, 1000)
         body.clear()
         score=0
         delay=0.1
         sb.clear()
-        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
+        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, high_score), align="center" , font=("candara", 24 ,"bold"))
     #new food generation
     if head.distance(food)<20:
         x=random.randint(-270,270)
@@ -109,10 +109,10 @@ while True:
         delay-=0.001
         #increasing score and updating
         score+=10
-        if score > highestscore:
-            highestscore = score
+        if score > high_score:
+            high_score = score
         sb.clear()
-        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
+        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, high_score), align="center" , font=("candara", 24 ,"bold"))
     #moving snake body
     for i in range(len(body)-1,0,-1):
         x=body[i-1].xcor()
@@ -135,6 +135,6 @@ while True:
             score=0
             delay=0.1
             sb.clear()
-            sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
+            sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, high_score), align="center" , font=("candara", 24 ,"bold"))
     time.sleep(delay)
 screen.mainloop()
