@@ -75,7 +75,6 @@ screen.onkeypress(moveup ,"Up")
 screen.onkeypress(movedown,"Down")
 screen.onkeypress(moveleft,"Left")
 screen.onkeypress(moveright,"Right")
-
 #main loop
 while True:
     screen.update()
