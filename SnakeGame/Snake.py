@@ -4,132 +4,137 @@ import time
 
 delay = 0.1
 score = 0
-highestscore ="0"
+highestscore = 0
 
 #snake body
 body=[]
 
 #creating a screen
 screen= turtle.Screen()
-screen.setup(width=500, height=500)
+screen.setup(width=600, height=600)
 screen.bgcolor("black")
 screen.title("SNAKE GAME")
+screen.tracer(0)
 
 #creating snake head
 head=turtle.Turtle()
-head.shape("square")
-head.color("white")
-head.fillcolor("white")
+head.shape("circle")
+head.color("red")
 head.penup()
 head.goto(0,0)
+head.direction = "Stop"
 
 # creating food
 food=turtle.Turtle()
-food.shape("circle")
-food.color("#386641")
-food.fillcolor("#A7C957")
+food.shape("square")
+food.color("#70e000")
 food.speed(0)
 food.penup()
-food.ht()
 food.goto(0,150)
-food.st()
 
 # creating scoreboard
 sb=turtle.Turtle()
+sb.speed(0)
 sb.shape("square")
-sb.color("#fb6f92")
-sb.fillcolor("#fb6f92")
+sb.color("white")
 sb.penup()
-sb.ht()
-sb.goto(-450,-450)
-sb.write(" SCORE : 0      | HIGHEST SCORE : 0 ")
+sb.hideturtle()
+sb.goto(0,250)
+sb.write("Score : 0 High Score : 0", align="center",font=("candara", 24, "bold"))
 
+# assigning key direction
 def moveup():
-    if head.heading()!= 90:
-        head.right(270)
+    if head.direction !="down":
+        head.direction ="up"
 def movedown():
-    if head.heading()!=270:
-        head.right(90)
+    if head.direction !="up":
+        head.direction ="down"
 def moveleft():
-    if head.heading()!=0:
-        head.right(180)
+    if head.direction !="right":
+        head.direction ="left"
 def moveright():
-    if head.heading()!=180:
-        head.right(0)
+    if head.direction !="left":
+        head.direction ="right"
 def move():
-    if head.heading()==270:
+    if head.direction =="up":
         y=head.ycor()
         head.sety(y+20)
-    if head.heading()==90:
+    if head.direction =="down":
         y=head.ycor()
         head.sety(y-20)
-    if head.heading()==180:
+    if head.direction =="left":
         x=head.xcor()
         head.setx(x-20)
-    if head.heading()==0:
+    if head.direction =="right":
         x=head.xcor()
         head.setx(x+20)
 
 #key mapping
 screen.listen()
-screen.onkey(moveup ,"Up")
-screen.onkey(movedown,"Down")
-screen.onkey(moveleft,"Left")
-screen.onkey(moveright,"Right")
+screen.onkeypress(moveup ,"Up")
+screen.onkeypress(movedown,"Down")
+screen.onkeypress(moveleft,"Left")
+screen.onkeypress(moveright,"Right")
 
 #main loop
 while True:
     screen.update()
-
+    #checking collision with borders
+    x=head.xcor()
+    y=head.ycor()
+    if x > 290 or x < -290 or y>290 or y < -290 :
+        time.sleep(1)
+        head.goto(0,0)
+        head.direction = "Stop"
+        for j in body:
+                j.goto(1000, 1000)
+        body.clear()
+        score=0
+        delay=0.1
+        sb.clear()
+        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
     #new food generation
     if head.distance(food)<20:
-        x=random.randint(-450,450)
-        y=random.randint(-450,450)
+        x=random.randint(-270,270)
+        y=random.randint(-270,270)
         food.goto(x,y)
-
-    #increasing snake body length
-    body_part=turtle.Turtle()
-    body_part.speed(0)
-    body_part.penup()
-    body_part.shape("square")
-    body_part.color("#D90429")
-    body_part.fillcolor("#D90429")
-    body.append(body_part)
-
-    #increasing score
-    score+=1
-    #increasing snake speed
-    delay-=0.001
-    #score update
-    if score>int(highestscore):
-        highestscore=score
-    sb.clear()
-    sb.write("SCORE:{} HIGHESTSCORE: {}",format(score,str(highestscore)))
+        #increasing snake body length
+        body_part=turtle.Turtle()
+        body_part.speed(0)
+        body_part.shape("circle")
+        body_part.color("#70E000")
+        body_part.penup()
+        body.append(body_part)
+        #increasing snake speed
+        delay-=0.001
+        #increasing score and updating
+        score+=10
+        if score > highestscore:
+            highestscore = score
+        sb.clear()
+        sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
     #moving snake body
     for i in range(len(body)-1,0,-1):
         x=body[i-1].xcor()
         y=body[i-1].ycor()
         body[i].goto(x,y)
-    if len(body)>0:
+    if len(body) > 0:
         x=head.xcor()
         y=head.ycor()
         body[0].goto(x,y)
     move()
-    time.sleep(0)
-
     #checking collision with body
     for j in body:
-        if j.distance(head)<20:
+        if j.distance(head) < 20:
             time.sleep(1)
             head.goto(0,0)
-            j.ht()
+            head.direction = "stop"
+            for j in body:
+                j.goto(1000, 1000)
             body.clear()
             score=0
-            delay=0
+            delay=0.1
             sb.clear()
-            sb.write("SCORE:{} HIGHESTSCORE: {}",format(score,highestscore))
-
-    #checking collision with borders
-    x=head.xcor()
-    y=head.ycor()
+            sb.write("SCORE : {}  HIGH SCORE : {}" .format(score, highestscore), align="center" , font=("candara", 24 ,"bold"))
+    time.sleep(delay)
 screen.mainloop()
